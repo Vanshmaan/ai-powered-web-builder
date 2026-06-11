@@ -1,23 +1,47 @@
+import env from "./env.js";
 import { GoogleGenAI } from "@google/genai";
 
+console.log("GEMINI:", env.GEMINI_API_KEY);
+
 const ai = new GoogleGenAI({
-    apiKey : process.env.GEMINI_API_KEY,
-})
+  apiKey: env.GEMINI_API_KEY,
+});
 
-const MODEL_NAME = "gemini-2.5-flash";
+const MODELS = [
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-lite",
+  "gemini-2.5-pro",
+  "gemini-2.0-flash",
+  "gemini-2.0-flash-lite",
+  "gemini-1.5-pro",
+  "gemini-1.5-flash",
+  "gemini-1.5-flash-8b",
+];
 
-const generateContent = async (prompt) => {
+export async function generateContent(prompt) {
+  let lastError;
+
+  for (const model of MODELS) {
     try {
-        const response = await ai.models.generateContent({
-            model:MODEL_NAME,
-            contents:prompt,
-        })
+      console.log(`Trying model: ${model}`);
 
-        return response.text;
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+      });
+
+      console.log(`Success with model: ${model}`);
+
+      return response.text;
     } catch (error) {
-        console.error("Gemini API Error:",error.message);
-        throw new Error(`Gemini API Failed: ${error.message}`);
+      console.error(`Model ${model} failed:`, error.message);
+      lastError = error;
     }
-}
+  }
 
-export {generateContent};
+  throw new Error(
+    `All Gemini models failed. Last error: ${
+      lastError?.message || "Unknown error"
+    }`
+  );
+}

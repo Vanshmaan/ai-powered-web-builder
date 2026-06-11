@@ -1,14 +1,15 @@
 import { generateContent } from "../configs/gemini.config.js";
 
-export const askGemini = async(prompt) => {
-    try {
-        const response = await generateContent(prompt);
-        if(!response){
-            throw new Error('Gemini returned an empty response');
-        }
+export const askGemini = async (prompt) => {
+  try {
+    console.log("Calling Gemini...");
+    const response = await generateContent(prompt);
 
-        return response;
-    } catch (error) {
-        throw new Error('The Ai service is currently unavailable. Please try again later.')
-    }
-}
+    console.log("Gemini response received");
+
+    return response;
+  } catch (error) {
+    console.error("Gemini Error:", error);
+    throw error;
+  }
+};

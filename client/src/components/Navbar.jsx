@@ -18,14 +18,22 @@ function Navbar() {
     navigate('/login');
   };
 
+  const handleBrandClick = () => {
+    if (user) {
+      navigate('/dashboard');
+    } else {
+      navigate('/');
+    }
+  };
+
   const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
 
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <Link to="/dashboard" className="navbar-brand">
+        <div className="navbar-brand" onClick={handleBrandClick} style={{ cursor: 'pointer' }}>
           <span className="navbar-brand-mark">&lt;/&gt;</span> NxtBuild
-        </Link>
+        </div>
         <div className="navbar-links">
           <Link to="/dashboard" className={`navbar-link ${isActive('/dashboard') ? 'active' : ''}`}>
             My Projects
