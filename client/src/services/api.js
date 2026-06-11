@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'https://ai-powered-web-builder.onrender.com';
 
 const getHeaders = () => {
     const token = Cookies.get('token');
